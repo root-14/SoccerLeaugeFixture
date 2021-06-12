@@ -4,6 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.awarec.soccerleaugefixture.R;
 import com.awarec.soccerleaugefixture.viewmodel.ViewPagerAdapter;
@@ -17,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
     String[] team_names;
 
     private ViewPager viewPager;
+    private Button btn_drawFixtures;
+    private TextView tv_allTeams;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,9 +30,32 @@ public class MainActivity extends AppCompatActivity {
 
 
         viewPager = findViewById(R.id.viewpager);
+        btn_drawFixtures = findViewById(R.id.btn_draw_fixtures);
+        tv_allTeams = findViewById(R.id.tv_all_teams);
 
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, fillList(6));
+        team_names = fillList(6);
+
+        String allNames = new String();
+        for (int i = 0; i < team_names.length; i++) {
+
+            allNames += "\n\n" + team_names[i];
+        }
+        //System.out.println(allNames);
+
+        tv_allTeams.setText(allNames);
+
+
+        btn_drawFixtures.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewPager.setVisibility(View.VISIBLE);
+            }
+        });
+
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, team_names);
         viewPager.setAdapter(viewPagerAdapter);
+
+
     }
 
 
