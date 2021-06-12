@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
 
             allNames += "\n\n" + team_names[i];
         }
-        //System.out.println(allNames);
 
         tv_allTeams.setText(allNames);
 
@@ -49,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 viewPager.setVisibility(View.VISIBLE);
+                System.out.println("tık tık");
             }
         });
 
