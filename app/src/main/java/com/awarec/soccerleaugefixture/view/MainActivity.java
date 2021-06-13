@@ -2,6 +2,10 @@ package com.awarec.soccerleaugefixture.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.transition.Fade;
+import androidx.transition.Transition;
+import androidx.transition.TransitionManager;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
@@ -41,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btn_drawFixtures;
     private TextView tv_allTeams;
     private ProgressBar progressBar;
+    private ConstraintLayout constraintLayout;
 
     public String BASE_URL = "https://60c1fe47069afc0017f494a3.mockapi.io/api/v1/";
 
@@ -54,16 +59,16 @@ public class MainActivity extends AppCompatActivity {
         btn_drawFixtures = findViewById(R.id.btn_draw_fixtures);
         tv_allTeams = findViewById(R.id.tv_all_teams);
         progressBar = findViewById(R.id.progressBar);
+        constraintLayout = findViewById(R.id.base_layout);
 
         callApi();
 
         switch (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
             case Configuration.UI_MODE_NIGHT_YES:
-                System.out.println("gece modu evet");
+                System.out.println("Dark Mode: Yes");
                 break;
             case Configuration.UI_MODE_NIGHT_NO:
-                System.out.println("gece modu hayır");
-
+                System.out.println("Dark Mode: No");
                 break;
         }
 
@@ -114,8 +119,9 @@ public class MainActivity extends AppCompatActivity {
                 btn_drawFixtures.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        viewPager.setVisibility(View.VISIBLE);
-                        System.out.println("tık tık");
+                        //viewPager.setVisibility(View.VISIBLE);
+                        toggle();
+
                     }
                 });
                 //viewpager
@@ -128,8 +134,30 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "an error happened.", Toast.LENGTH_SHORT).show();
             }
         });
-
         return;
+    }
+
+    private void toggle() {
+
+        Boolean isVisible = false;
+
+        Transition transition = new Fade();
+        transition.setDuration(600);
+        transition.addTarget(R.id.viewpager);
+
+        TransitionManager.beginDelayedTransition(constraintLayout, transition);
+        //viewPager.setVisibility(View.VISIBLE);
+
+
+        System.out.println("gelen+" + viewPager.getVisibility());
+
+        if (viewPager.getVisibility() == View.VISIBLE) {
+            isVisible = true;
+        } else if (viewPager.getVisibility() == View.INVISIBLE) {
+            isVisible = false;
+        }
+
+        viewPager.setVisibility(isVisible ? View.INVISIBLE : View.VISIBLE);
 
     }
 
