@@ -45,7 +45,7 @@
         android:layout_marginBottom="16dp"
         android:text="Draw Fixtures"
         app:layout_constraintBottom_toBottomOf="@+id/viewpager"
-        app:layout_constraintEnd_toEndOf="@+id/viewpager"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/viewpager" />
 
     <androidx.viewpager.widget.ViewPager

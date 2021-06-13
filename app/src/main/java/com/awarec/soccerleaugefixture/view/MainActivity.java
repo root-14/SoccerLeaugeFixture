@@ -1,13 +1,20 @@
 package com.awarec.soccerleaugefixture.view;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,9 +36,8 @@ import retrofit2.http.POST;
 
 public class MainActivity extends AppCompatActivity {
 
-    String[] team_names;
-
     private ViewPager viewPager;
+
     private Button btn_drawFixtures;
     private TextView tv_allTeams;
     private ProgressBar progressBar;
@@ -50,12 +56,22 @@ public class MainActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
 
         callApi();
-        // team_names = fillList(6);
+
+        switch (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
+            case Configuration.UI_MODE_NIGHT_YES:
+                System.out.println("gece modu evet");
+                break;
+            case Configuration.UI_MODE_NIGHT_NO:
+                System.out.println("gece modu hayır");
+
+                break;
+        }
 
     }
 
+    //getting team names from REST API
     public void callApi() {
-
+        //getting data
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -83,18 +99,18 @@ public class MainActivity extends AppCompatActivity {
                 for (int i = 0; i < modelList.size(); i++) {
                     _teams[i] = modelList.get(i).getTeam_name();
                 }
-                team_names = _teams;
 
                 //list to all team names
                 String allNames = new String();
-                for (int i = 0; i < team_names.length; i++) {
+                for (int i = 0; i < _teams.length; i++) {
 
-                    allNames += "\n\n" + team_names[i];
+                    allNames += "\n\n" + _teams[i];
                 }
 
+                //displaying all teams when app launched
                 tv_allTeams.setText(allNames);
 
-
+                //fixture button listener
                 btn_drawFixtures.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -102,8 +118,8 @@ public class MainActivity extends AppCompatActivity {
                         System.out.println("tık tık");
                     }
                 });
-
-                ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getApplicationContext(), team_names);
+                //viewpager
+                ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getApplicationContext(), _teams);
                 viewPager.setAdapter(viewPagerAdapter);
             }
 
@@ -117,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
+    //for demo purposes
     public static String[] fillList(int count) {
 
         String array[] = new String[count];
@@ -125,9 +141,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < count; i++) {
 
             array[i] = "team" + (i + 1);
-
             // System.out.println(array[i]);
-
         }
 
         System.out.println("length: " + array.length);

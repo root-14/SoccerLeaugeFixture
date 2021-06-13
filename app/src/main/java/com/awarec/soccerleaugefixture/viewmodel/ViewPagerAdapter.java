@@ -37,15 +37,14 @@ public class ViewPagerAdapter extends PagerAdapter {
 
         weeksList = new ArrayList<String[]>();
 
-
+        //getting weekly fixture
         for (int i = 0; i < week; i++) {
 
-            String[] _denemeStrings = matchTeams(lastWeekFixture);
+            String[] _temp = matchTeams(lastWeekFixture);
 
             lastWeekFixture = makeFixture(lastWeekFixture);
-            weeksList.add(_denemeStrings);
+            weeksList.add(_temp);
         }
-
 
         String[] currentWeek = getWeek(0);
         for (int j = 0; j < currentWeek.length; j++) {
@@ -68,11 +67,12 @@ public class ViewPagerAdapter extends PagerAdapter {
         return array;
     }
 
+    //getting specific week
     private static String[] getWeek(int weekIndex) {
         return weeksList.get(weekIndex);
     }
 
-
+    //determine to how many elements in viewpager
     @Override
     public int getCount() {
         return week;
@@ -87,7 +87,7 @@ public class ViewPagerAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-
+        //inflating layout
         View view = LayoutInflater.from(context).inflate(R.layout.item_view_pager, container, false);
 
         TextView tv_week, tv_matches;
@@ -100,6 +100,7 @@ public class ViewPagerAdapter extends PagerAdapter {
 
         String s = "";
 
+        //getting weekly information based on viewpager position
         for (int i = 0; i < weeklyMatchCount; i++) {
 
             s += "\n" + getWeek(position)[i];
@@ -113,9 +114,7 @@ public class ViewPagerAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, Object object) {
-
         container.removeView((View) object);
-        //super.destroyItem(container, position, object);
     }
 
     //getting fixtured array and matched itself to ready to publish
@@ -126,15 +125,15 @@ public class ViewPagerAdapter extends PagerAdapter {
 
         String[] _teamStrings = new String[teamStrings.length / 2];
 
+        //matching it from the start to end
         for (int i = 0; i < maxLoop; i++) {
-
             _teamStrings[currentArrayIndex] = teamStrings[a] + " - " + teamStrings[b];
             currentArrayIndex++;
             a++;
             b--;
 
         }
-//its returning matched results
+        //its returning matched results
         return _teamStrings;
 
     }
@@ -152,7 +151,8 @@ public class ViewPagerAdapter extends PagerAdapter {
         // _teamNameStrings updated after odd statement as well
         // _teamMatrixStrings used to facilitate fixture chart
 
-        // detecting odd number team and update current list
+
+        // detecting odd number team and update current list like 1,2,3,4,5 -> 1,2,3,4,5,bye
         if (_teamNameStrings.length % 2 != 0) {
             // odd number of team
             String[] _oddArrayStrings = new String[teamNameStrings.length + 1];// create one big array from odd list
@@ -223,10 +223,7 @@ public class ViewPagerAdapter extends PagerAdapter {
             i++;
             currentLine--;
             currentArrayIndex++;
-
         }
-
-        // you can return array not matrix. then sort by 2
 
         // for displaying
         for (int j = 0; j < _shuffeledStrings.length; j++) {
@@ -236,8 +233,6 @@ public class ViewPagerAdapter extends PagerAdapter {
         totalMatchCount = _shuffeledStrings.length * (_shuffeledStrings.length - 1);
 
         System.out.println("total match count: " + totalMatchCount);
-        // _shuffeledStrings dönmeli ki tekrar döngüye sokabileyim
         return _shuffeledStrings;
-
     }
 }
