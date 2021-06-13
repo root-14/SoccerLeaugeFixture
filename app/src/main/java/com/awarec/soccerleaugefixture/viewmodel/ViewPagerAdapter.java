@@ -21,17 +21,18 @@ public class ViewPagerAdapter extends PagerAdapter {
     private String[] team_names;
     static ArrayList<String[]> weeksList;
 
-    private int week, totalMatchCount = 0;
+    private int week, totalMatchCount, weeklyMatchCount;
 
     //constructor
     public ViewPagerAdapter(Context context, String[] team_names) {
         this.context = context;
         this.team_names = team_names;
 
-        totalMatchCount = 6 * 5;
+        totalMatchCount = team_names.length * (team_names.length - 1);
         String[] teams = team_names;//fillList(5);
         String[] lastWeekFixture = makeFixture(teams);
         week = totalMatchCount / (teams.length / 2);
+        weeklyMatchCount = totalMatchCount / week;
 
 
         weeksList = new ArrayList<String[]>();
@@ -52,6 +53,7 @@ public class ViewPagerAdapter extends PagerAdapter {
         }
     }
 
+    //demoe purposes
     public static String[] fillList(int count) {
 
         String array[] = new String[count];
@@ -59,8 +61,6 @@ public class ViewPagerAdapter extends PagerAdapter {
         for (int i = 0; i < count; i++) {
 
             array[i] = "team" + (i + 1);
-
-            // System.out.println(array[i]);
 
         }
 
@@ -71,8 +71,6 @@ public class ViewPagerAdapter extends PagerAdapter {
     private static String[] getWeek(int weekIndex) {
         return weeksList.get(weekIndex);
     }
-
-
 
 
     @Override
@@ -99,17 +97,14 @@ public class ViewPagerAdapter extends PagerAdapter {
 
 
         tv_week.setText("Week: " + (position + 1));
-        
+
         String s = "";
-        
-        for (int i=0;i<totalMatchCount/week;i++){
-            
-            s+="\n"+getWeek(position)[i];
+
+        for (int i = 0; i < weeklyMatchCount; i++) {
+
+            s += "\n" + getWeek(position)[i];
         }
-
         tv_matches.setText(s);
-
-
 
         container.addView(view);
 
